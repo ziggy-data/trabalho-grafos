@@ -1,5 +1,31 @@
 import numpy as np
 
+def grafo_para_matriz_adj(grafo, ponderado=False, direcionado=False):
+    vertices = list(grafo.keys())
+    n = len(vertices)
+    indice_vertice = {vertices[i]: i for i in range(n)}
+    
+    # Inicializando a matriz de adjacência com 0 (ou float('inf') para indicar ausência de aresta)
+    matriz_adj = [[0] * n for _ in range(n)]
+    
+    if ponderado:
+        for vertice in grafo:
+            for vizinho, peso in grafo[vertice]:
+                i, j = indice_vertice[vertice], indice_vertice[vizinho]
+                matriz_adj[i][j] = int(peso)
+                if not direcionado:
+                    matriz_adj[j][i] = int(peso)
+    else:
+        for vertice in grafo:
+            for vizinho in grafo[vertice]:
+                i, j = indice_vertice[vertice], indice_vertice[vizinho]
+                matriz_adj[i][j] = 1
+                if not direcionado:
+                    matriz_adj [j][i] = 1
+    
+    return matriz_adj, vertices
+
+
 def adj_para_incidencia(matriz_adj, direcionado=False):
     num_vertices = len(matriz_adj)
     arestas = []
